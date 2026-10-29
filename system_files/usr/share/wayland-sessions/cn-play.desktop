@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=CN-PLAY Console
+Comment=Fullscreen console interface for your games
+Exec=/usr/bin/cn-play-session
+Type=Application
+DesktopNames=CN-PLAY

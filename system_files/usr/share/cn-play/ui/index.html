@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CN-PLAY</title>
+<style>
+:root{--bg:#040a18;--panel:#0a1630;--line:#173a7a;--acc:#1f6bff;--acc2:#5aa9ff;--tx:#e8f0ff;--mu:#8ea3c8}
+*{box-sizing:border-box}
+html{font-size:1.05vw}
+html,body{height:100%;margin:0;overflow:hidden;color:var(--tx);font:500 1rem/1.3 system-ui,"Segoe UI",sans-serif;background:radial-gradient(120% 90% at 20% 0,#0b2354,var(--bg) 60%)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.f{outline:0;transition:transform .12s,box-shadow .12s}
+.f:focus-visible{transform:scale(1.04);box-shadow:0 0 0 .2rem var(--acc2),0 0 1.6rem rgba(31,107,255,.6);z-index:2}
+header{display:flex;align-items:center;gap:3rem;padding:1.6rem 3rem 0}
+.logo{font:italic 900 2.6rem/1 system-ui,sans-serif;letter-spacing:.04em;color:#2d7bff;text-shadow:0 0 1.2rem rgba(45,123,255,.5)}
+.logo small{display:block;font:600 .55rem/1 system-ui;letter-spacing:.3em;color:var(--mu);margin-top:.4rem;font-style:normal;text-shadow:none}
+nav{display:flex;gap:.6rem;flex:1}
+nav button{padding:.7rem 1.6rem;border-radius:.7rem;color:var(--mu);font-size:1.1rem}
+nav button.on{background:#0e2a66;color:#fff;box-shadow:inset 0 0 0 .1rem var(--acc)}
+#clock{font-size:1.4rem;color:var(--mu)}
+main{padding:1.4rem 3rem 0;height:calc(100% - 6rem);overflow-y:auto;scrollbar-width:none}
+h2{font-size:1.5rem;margin:1.6rem 0 .8rem}
+.hero{display:flex;gap:1.2rem}
+.feat{flex:0 0 46rem;height:21rem;border-radius:1rem;padding:2rem;display:flex;flex-direction:column;justify-content:flex-end;gap:.8rem;position:relative;overflow:hidden;box-shadow:inset 0 0 0 .15rem var(--acc)}
+.feat h1{margin:0;font-size:3rem;line-height:1;font-style:italic;font-weight:900;position:relative}
+.feat p{margin:0;color:#c9d8f5;position:relative}
+.btn{display:inline-block;background:var(--acc);padding:.7rem 2.2rem;border-radius:.5rem;font-weight:700;position:relative;align-self:flex-start}
+.btn.alt{background:#102553;box-shadow:inset 0 0 0 .08rem var(--line)}
+.row{display:flex;gap:1rem;overflow-x:auto;padding:.6rem .4rem 1.2rem;scrollbar-width:none}
+.tile{flex:0 0 11rem;height:16.5rem;border-radius:.7rem;position:relative;overflow:hidden;box-shadow:inset 0 0 0 .08rem #14306a}
+.row.wide .tile{flex-basis:15rem;height:8.5rem}
+.tile .art,.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile b{position:absolute;left:0;right:0;bottom:0;padding:.6rem .7rem;font-size:.9rem;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1.1rem;padding:.6rem .4rem 2rem}
+.grid .tile{height:16rem}
+.split{display:flex;gap:2rem}
+.side{flex:0 0 17rem;display:flex;flex-direction:column;gap:.4rem}
+.side button{padding:.75rem 1rem;border-radius:.6rem;color:var(--mu)}
+.side button.on{background:#0e2a66;color:#fff}
+.panel{flex:1;background:var(--panel);border-radius:.9rem;padding:1.4rem 1.8rem;box-shadow:inset 0 0 0 .08rem #14306a}
+.line{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;margin:.5rem 0;border-radius:.6rem;background:#0d1d42;width:100%}
+.detail{display:flex;gap:2.5rem}.detail .tile{flex:0 0 17rem;height:25rem}
+.detail h1{font-size:2.6rem;margin:.2rem 0 1rem}.acts{display:flex;gap:.8rem;margin-top:1.4rem}
+.note{color:var(--mu);font-size:.9rem}
+#toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:#0e2a66;padding:.8rem 1.6rem;border-radius:.6rem;box-shadow:inset 0 0 0 .1rem var(--acc);opacity:0;transition:opacity .2s}
+#toast.show{opacity:1}
+nav svg{width:1.5rem;height:1.5rem;display:block;margin:0 auto .3rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button{text-align:center;min-width:6.5rem}nav button.on{color:#fff;background:linear-gradient(#123a8f,#0c2a6b)}
+.feat{background-image:linear-gradient(90deg,rgba(4,10,24,.85),transparent 70%)}
+.tag{position:fixed;right:3rem;bottom:1.4rem;color:var(--acc2);letter-spacing:.06em}
+.cnt{float:right;background:#17398a;border-radius:.4rem;padding:0 .5rem;font-size:.85rem;color:#fff}
+.info{margin-top:1.4rem;padding:1rem 1.2rem;border-radius:.6rem;background:#0b1836;box-shadow:inset 0 0 0 .08rem #14306a}
+.info b{display:block;margin-bottom:.4rem}.heart{color:#ff3b5c}
+.status{display:flex;align-items:center;gap:1rem}
+.ico{width:2.6rem;height:2.6rem;border-radius:.7rem;color:var(--mu);display:grid;place-items:center}
+.ico svg{width:1.5rem;height:1.5rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.ico.off{opacity:.45}
+.q{width:100%;background:#0d1d42;color:var(--tx);border:0;border-radius:.6rem;padding:.8rem 1rem;font:inherit;box-shadow:inset 0 0 0 .08rem var(--line);margin:.4rem 0 .8rem}
+.q.f:focus-visible{transform:none}
+.osk{display:flex;flex-direction:column;gap:.3rem;align-items:center;margin-bottom:.8rem}.osk>div{display:flex;gap:.3rem}
+.key{min-width:2.8rem;height:2.5rem;border-radius:.45rem;background:#0d1d42;text-align:center;box-shadow:inset 0 0 0 .06rem #14306a}.key.wd{min-width:7rem}
+.grid p{grid-column:1/-1}
+@media (prefers-reduced-motion:reduce){.f{transition:none}}
+</style></head><body>
+<header><div class="logo">CN-PLAY<small>YOUR GAMES &nbsp;·&nbsp; YOUR CONSOLE</small></div>
+<nav id="nav"></nav><div class="status"><button class="f ico" data-tab="search" aria-label="Search" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg></button><button class="f ico off" id="wf" data-tab="wifi" aria-label="Wi-Fi" title="Wi-Fi"><svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".8"/></svg></button><span id="clock"></span></div></header>
+<main id="view"></main><div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let st={fav:[],recent:[]};try{st=JSON.parse(localStorage.cnp)||st}catch(e){}
+const save=()=>{try{localStorage.cnp=JSON.stringify(st)}catch(e){}};
+let games=[],demo=false,tab='home',prev='home',cat='all',asc=true,cur=null,setPage='general';
+const ICON={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',library:'<path d="M3 5c3-1 6-1 9 1v14c-3-2-6-2-9-1zM21 5c-3-1-6-1-9 1v14c3-2 6-2 9-1z"/>',store:'<path d="M4 8h16v12H4zM8 8V6a4 4 0 0 1 8 0v2M4 13h16"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'};
+const TABS=[['home','Home'],['library','Library'],['store','Store'],['settings','Settings']];
+const grad=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return`linear-gradient(160deg,hsl(${h} 70% 38%),hsl(${(h+50)%360} 60% 14%))`};
+const byId=id=>games.find(g=>g.id===id);
+const post=p=>fetch(p,{method:'POST',headers:{'X-CN-Play':'1'}}).then(r=>r.json()).catch(()=>({}));
+const postJ=(p,b)=>fetch(p,{method:'POST',headers:{'X-CN-Play':'1','Content-Type':'application/json'},body:JSON.stringify(b)}).then(r=>r.json());
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let q='',typing='q',shift=false,wifi={loaded:false,nets:[],msg:''},wst={cur:''};
+const ROWS=['1234567890','qwertyuiop','asdfghjkl','zxcvbnm','-_.@!#$%&*?'];
+const osk=()=>`<div class="osk">${ROWS.map(r=>`<div>${[...r].map(c=>`<button class="f key" data-k="${esc(c)}">${shift?esc(c.toUpperCase()):esc(c)}</button>`).join('')}</div>`).join('')}<div><button class="f key wd" data-sp>Space</button><button class="f key wd" data-bs>Delete</button><button class="f key wd" data-sh>Shift</button></div></div>`;
+function typeKey(c){const i=$('#'+typing);if(!i)return;i.value+=shift?c.toUpperCase():c;if(shift){shift=false;skin()}i.dispatchEvent(new Event('input',{bubbles:true}))}
+function skin(){document.querySelectorAll('.key[data-k]').forEach(k=>k.textContent=shift?k.dataset.k.toUpperCase():k.dataset.k)}
+function search(){typing='q';return`<input id="q" class="f q" placeholder="Search your games" value="${esc(q)}" autocomplete="off" aria-label="Search games">${osk()}<div id="res" class="grid"></div>`}
+function results(){const el=$('#res');if(!el)return;const t=q.trim().toLowerCase(),l=t?games.filter(g=>g.name.toLowerCase().includes(t)).slice(0,12):[];
+ el.innerHTML=l.length?l.map(tile).join(''):`<p class="note">${t?'No games match "'+esc(q)+'".':'Type to find a game.'}</p>`}
+const wp=m=>`<div class="panel"><h2 style="margin-top:0">Wi-Fi</h2><p class="note">${m}</p></div>`;
+function wifiView(){const w=wifi;
+ if(demo)return wp('Preview mode: Wi-Fi is not available.');
+ if(!w.loaded)return wp('Looking for networks…');
+ if(!w.avail)return wp('Wi-Fi control needs NetworkManager (nmcli), which was not found on this system.');
+ if(!w.dev)return wp('No Wi-Fi adapter found.');
+ const sel=w.pw&&w.sel!=null?w.nets[w.sel]:null;if(sel)typing='pw';
+ return`<div class="panel"><h2 style="margin-top:0">Wi-Fi</h2><div class="acts" style="margin:0 0 .8rem"><button class="f btn" data-wtoggle>Wi-Fi: ${w.on?'On':'Off'}</button>${w.on?'<button class="f btn alt" data-wscan>Scan again</button>':''}</div>
+ <p class="note" role="status">${esc(w.msg||(w.cur?'Connected to '+w.cur:''))}</p>
+ ${w.on?(w.nets.length?w.nets.map((n,i)=>`<button class="f line" data-net="${i}"><span>${esc(n.ssid)}${n.active?' · Connected':n.known?' · Saved':''}</span><span class="note">${n.sec?'Secured':'Open'} · ${n.signal}%</span></button>`).join(''):'<p class="note">No networks found. Try Scan again.</p>'):'<p class="note">Turn Wi-Fi on to see networks.</p>'}
+ ${sel?`<div class="info"><b>Password for ${esc(sel.ssid)}</b><input id="pw" class="f q" type="password" autocomplete="off" aria-label="Wi-Fi password">${osk()}<div class="acts"><button class="f btn" data-wconn>Connect</button><button class="f btn alt" data-wcancel>Cancel</button></div></div>`:''}</div>`}
+async function loadWifi(f){let w;try{w=await(await fetch('/api/wifi')).json()}catch(e){w={avail:false}}
+ wifi={...w,loaded:true,msg:wifi.msg||'',sel:null,pw:false};wst.cur=w.cur||'';stIcon();if(tab==='wifi')render(f||'[data-wtoggle]')}
+function pickNet(i){const n=wifi.nets[i];if(!n)return;
+ if(n.active){wifi.msg='Already connected to '+n.ssid;render('[data-net="'+i+'"]');return}
+ if(n.sec&&!n.known){wifi.sel=i;wifi.pw=true;render('#pw')}else wifiConnect(n.ssid,'')}
+async function wifiConnect(ssid,pw){wifi.msg='Connecting to '+ssid+'…';wifi.pw=false;wifi.sel=null;render('[data-wtoggle]');
+ const r=await postJ('/api/wifi/connect',{ssid,password:pw}).catch(()=>({ok:false,error:'Could not reach the CN-PLAY helper'}));
+ const m=r.ok?'Connected to '+ssid:'Could not connect: '+(r.error||'unknown error');wifi.msg=m;await loadWifi();wifi.msg=m;if(tab==='wifi')render('[data-wtoggle]')}
+async function wifiScan(){wifi.msg='Scanning…';render('[data-wscan]');await post('/api/wifi/scan');await sleep(3500);wifi.msg='';await loadWifi('[data-wscan]')}
+async function wifiSet(v){wifi.msg=v==='on'?'Turning Wi-Fi on…':'Turning Wi-Fi off…';render('[data-wtoggle]');await post('/api/wifi/radio/'+v);await sleep(2000);wifi.msg='';await loadWifi('[data-wtoggle]')}
+function stIcon(){const b=$('#wf');if(!b)return;b.classList.toggle('off',!wst.cur);b.title=demo?'Wi-Fi (preview)':wst.cur?'Wi-Fi: '+wst.cur:'Wi-Fi: not connected'}
+async function pollWifi(){if(demo)return;try{wst.cur=(await(await fetch('/api/wifi/status')).json()).cur||''}catch(e){}stIcon()}
+const netPanel=()=>`<h2 style="margin-top:0">Network</h2><div class="line"><span>Wi-Fi</span><span class="note">${demo?'Preview mode':wst.cur?'Connected to '+esc(wst.cur):'Not connected'}</span></div><div class="acts"><button class="f btn" data-tab="wifi">Manage Wi-Fi</button></div>`;
+function extra(D){
+ if('k'in D){typeKey(D.k);return 1}
+ if('sp'in D){typeKey(' ');return 1}
+ if('bs'in D){const i=$('#'+typing);if(i){i.value=i.value.slice(0,-1);i.dispatchEvent(new Event('input',{bubbles:true}))}return 1}
+ if('sh'in D){shift=!shift;skin();return 1}
+ if('wtoggle'in D){wifiSet(wifi.on?'off':'on');return 1}
+ if('wscan'in D){wifiScan();return 1}
+ if(D.net!==undefined){pickNet(+D.net);return 1}
+ if('wconn'in D){const n=wifi.nets[wifi.sel];if(n)wifiConnect(n.ssid,$('#pw').value);return 1}
+ if('wcancel'in D){wifi.sel=null;wifi.pw=false;render('[data-net]');return 1}
+ return 0}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200)}
+const tile=g=>`<button class="f tile" data-id="${esc(g.id)}"><span class="art" style="background:${grad(g.name)}"></span>${g.art?`<img src="${esc(g.art)}" alt="" onerror="this.remove()">`:''}<b>${esc(g.name)}</b></button>`;
+const recent=()=>st.recent.map(byId).filter(Boolean);
+function play(g){if(!g)return;st.recent=[g.id,...st.recent.filter(i=>i!==g.id)].slice(0,12);save();
+ if(demo)return toast('Preview mode: Steam is not connected');toast('Launching '+g.name+'…');post('/api/launch/'+g.id)}
+function home(){const r=recent(),f=r[0]||games[0];if(!f)return empty();
+ const rest=games.filter(g=>g!==f).slice(0,4);
+ return`<div class="hero"><div class="feat" style="background:${grad(f.name)}"><h1>${esc(f.name)}</h1><p>${r[0]?'Pick up where you left off.':'Ready when you are.'}</p><button class="f btn" data-play="${esc(f.id)}">&#9654;&nbsp; Play</button></div>
+ <div class="row">${rest.map(tile).join('')}</div></div>
+ <h2>Recently Played</h2><div class="row wide">${(r.length?r:games.slice(0,6)).map(tile).join('')}</div><div class="tag">Play &nbsp;·&nbsp; Explore &nbsp;·&nbsp; Enjoy</div>`}
+function empty(){return`<div class="panel"><h2>No games found</h2><p class="note">Install a game in Steam and it will appear here. Steam libraries are scanned each time you open Library.</p></div>`}
+function library(){const cats=[['all','All Games',games.length],['fav','Favorites',st.fav.filter(byId).length],['recent','Recently Played',recent().length]];
+ let l=cat==='fav'?games.filter(g=>st.fav.includes(g.id)):cat==='recent'?recent():[...games];
+ if(cat!=='recent')l.sort((a,b)=>a.name.localeCompare(b.name)*(asc?1:-1));
+ return`<div class="split"><div class="side">${cats.map(c=>`<button class="f ${cat===c[0]?'on':''}" data-cat="${c[0]}">${c[1]}<span class="cnt">${c[2]}</span></button>`).join('')}<button class="f" data-sort>Sort: ${asc?'A–Z':'Z–A'}</button></div>
+ <div style="flex:1">${l.length?`<div class="grid">${l.map(tile).join('')}</div>`:'<p class="note">Nothing here yet.</p>'}</div></div>`}
+function detail(){const g=cur;if(!g)return home();const fav=st.fav.includes(g.id);
+ return`<div class="detail">${tile(g)}<div><h1>${esc(g.name)}</h1><p class="note">${demo?'Demo entry':'Steam game · Installed'}</p>
+ <div class="acts"><button class="f btn" data-play="${esc(g.id)}">Play</button><button class="f btn alt" data-fav="${esc(g.id)}">${fav?'Remove from Favorites':'Add to Favorites'}</button><button class="f btn alt" data-back>Back</button></div></div></div>`}
+function store(){return`<div class="panel"><h2>Store</h2><p class="note">Browse and buy games in the Steam store. Press B to come back here.</p><div class="acts"><button class="f btn" data-store>Open Steam Store</button></div></div>`}
+function settings(){const pg=[['general','General'],['display','Display'],['audio','Audio'],['controller','Controller'],['network','Network'],['about','About']];
+ const sys=n=>`<h2 style="margin-top:0">${n}</h2><p class="note">These options are managed by the system settings app.</p><div class="acts"><button class="f btn" data-act="/api/system-settings">Open system settings</button></div>`;
+ const info=`<div class="info"><b>Console Info</b><div class="note">CN-PLAY Software v0.1</div><div class="note">Made for Gamers <span class="heart">&#9829;</span></div></div>`;
+ const body=setPage==='general'?`<h2 style="margin-top:0">General Settings</h2>
+ <div class="line"><span>Startup</span><span class="note">CN-PLAY (Fullscreen)</span></div>
+ <button class="f line" data-act="/api/power/reboot">Restart<span class="note">Reboot the console</span></button>
+ <button class="f line" data-act="/api/power/poweroff">Power off<span class="note">Shut down</span></button>
+ <button class="f line" data-act="/api/quit">Exit to Desktop<span class="note">Leave CN-PLAY</span></button>`+info
+ :setPage==='about'?`<h2 style="margin-top:0">About</h2><div class="line"><span>CN-PLAY Software</span><span class="note">v0.1</span></div><div class="line"><span>Based on</span><span class="note">Bazzite / Universal Blue</span></div>`+info
+ :setPage==='network'?netPanel():sys(pg.find(p=>p[0]===setPage)[1]);
+ return`<div class="split"><div class="side">${pg.map(p=>`<button class="f ${setPage===p[0]?'on':''}" data-set="${p[0]}">${p[1]}</button>`).join('')}</div><div class="panel">${body}</div></div>`}
+const V={home,library,store,settings,detail,search,wifi:wifiView};
+function render(focus){$('#nav').innerHTML=TABS.map(t=>`<button class="f ${tab===t[0]||(tab==='detail'&&prev===t[0])?'on':''}" data-tab="${t[0]}"><svg viewBox="0 0 24 24">${ICON[t[0]]}</svg>${t[1]}</button>`).join('');
+ $('#view').innerHTML=(demo?'<p class="note">Preview mode: Steam not connected, showing sample entries.</p>':'')+V[tab]();
+ const t=$(focus||'#view .f')||$('#view .f');if(t)t.focus()}
+function go(t){const from=tab;prev=tab==='detail'?prev:tab;tab=t;if(t==='search'&&from!=='detail')q='';
+ render(t==='home'?'[data-play]':t==='search'?'#q':null);if(t==='search')results();
+ if(t==='wifi'&&!demo){loadWifi();post('/api/wifi/scan').then(()=>setTimeout(()=>{if(tab==='wifi'&&wifi.sel==null)loadWifi('[data-net]')},4000))}}
+function back(){if(tab==='detail')go(prev);else if(tab!=='home')go('home')}
+document.addEventListener('click',e=>{const d=e.target.closest('button');if(!d)return;const D=d.dataset;if(extra(D))return;
+ if(D.tab)go(D.tab);else if(D.id){cur=byId(D.id);prev=tab;tab='detail';render()}
+ else if(D.play)play(byId(D.play));
+ else if(D.cat){cat=D.cat;render('[data-cat="'+cat+'"]')}
+ else if('sort'in D){asc=!asc;render('[data-sort]')}
+ else if(D.fav){st.fav=st.fav.includes(D.fav)?st.fav.filter(i=>i!==D.fav):[...st.fav,D.fav];save();render('[data-fav]')}
+ else if('back'in D)back();
+ else if('store'in D){demo?toast('Preview mode: Steam is not connected'):post('/api/store')}
+ else if(D.set){setPage=D.set;render('[data-set="'+setPage+'"]')}
+ else if(D.act){demo?toast('Preview mode'):post(D.act)}});
+function move(dx,dy){const els=[...document.querySelectorAll('.f')].filter(e=>e.offsetParent),c=document.activeElement;
+ if(!els.includes(c)){els[0]&&els[0].focus();return}
+ const r=c.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best,bs=1e9;
+ for(const e of els){if(e===c)continue;const b=e.getBoundingClientRect(),x=b.left+b.width/2-cx,y=b.top+b.height/2-cy,al=x*dx+y*dy;if(al<=1)continue;const s=al+(Math.abs(x*dy)+Math.abs(y*dx))*2.5;if(s<bs){bs=s;best=e}}
+ if(best){best.focus();best.scrollIntoView({block:'nearest',inline:'nearest'})}}
+const K={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;results()}});
+document.addEventListener('keydown',e=>{const inp=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(e.key==='Enter'&&inp){if(e.target.id==='q'){const t=$('#res .tile');if(t)t.click()}else if(e.target.id==='pw'){const c=$('[data-wconn]');if(c)c.click()}return}
+ if(K[e.key]){if(inp&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))return;e.preventDefault();move(...K[e.key])}
+ else if(e.key==='Escape'||(e.key==='Backspace'&&!inp)){e.preventDefault();back()}});
+const held={};
+function pad(){for(const p of navigator.getGamepads?navigator.getGamepads():[]){if(!p)continue;
+ const b=p.buttons,ax=p.axes,s={u:b[12]?.pressed||ax[1]<-.6,d:b[13]?.pressed||ax[1]>.6,l:b[14]?.pressed||ax[0]<-.6,r:b[15]?.pressed||ax[0]>.6,a:b[0]?.pressed,b:b[1]?.pressed,lb:b[4]?.pressed,rb:b[5]?.pressed};
+ for(const k in s){if(s[k]&&!held[k]){if(k==='u')move(0,-1);if(k==='d')move(0,1);if(k==='l')move(-1,0);if(k==='r')move(1,0);if(k==='a')document.activeElement.click();if(k==='b')back();
+  if(k==='lb'||k==='rb'){const i=TABS.findIndex(t=>t[0]===tab);const n=(Math.max(i,0)+(k==='rb'?1:3))%4;go(TABS[n][0])}}held[k]=s[k]}}
+ requestAnimationFrame(pad)}
+const tick=()=>{$('#clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false})};
+tick();setInterval(tick,10000);pad();
+async function load(){try{const r=await fetch('/api/games');if(!r.ok)throw 0;games=await r.json();demo=false}catch(e){
+ demo=true;games=['Skyline Quest','Night Drive','Block Builder','Star Harbor','Iron Arena','Pixel Farm','Dune Racer','Echo Valley'].map((n,i)=>({id:'d'+i,name:n,art:null}))}
+ render('[data-play]');pollWifi();setInterval(pollWifi,20000)}
+load();
+</script></body></html>
