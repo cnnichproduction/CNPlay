@@ -1,0 +1,19 @@
+#!/bin/sh
+# Starts the CN-PLAY bridge, then shows the UI fullscreen in a kiosk compositor.
+export CN_PLAY_UI="${CN_PLAY_UI:-/usr/share/cn-play/ui}"
+PORT=7878
+
+python3 /usr/libexec/cn-play/bridge.py "$PORT" &
+BRIDGE=$!
+trap 'kill $BRIDGE 2>/dev/null' EXIT
+
+for _ in $(seq 50); do
+  curl -fs "http://127.0.0.1:$PORT/api/ping" >/dev/null && break
+  sleep 0.1
+done
+
+BROWSER=$(command -v chromium-browser || command -v chromium)
+cage -s -- "$BROWSER" --kiosk --app="http://127.0.0.1:$PORT/" \
+  --user-data-dir="$HOME/.cache/cn-play-ui" --ozone-platform=wayland \
+  --noerrdialogs --disable-infobars --no-first-run --disable-translate \
+  --autoplay-policy=no-user-gesture-required
